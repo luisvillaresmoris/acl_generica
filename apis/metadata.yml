@@ -1,0 +1,7 @@
+pipeline:
+  version: 3
+
+apis:
+  - name: "Generic ACL"
+    api-spec-type: rest
+    definition-path: generic-acl/rest

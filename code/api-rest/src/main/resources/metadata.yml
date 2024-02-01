@@ -1,0 +1,14 @@
+api:
+  name: ACL API
+  version: 0.0.1
+  metadata:
+    version: 0.0.1
+  definition: openapi-rest.yml
+  type: kernel
+  description: API to get identifier equivalences between platforms
+  contact:
+    name: DRBCPE Team
+    email: luismcsa@inditex.com
+  visibility: PUBLIC
+  tags:
+    - IOPCOMPRAS

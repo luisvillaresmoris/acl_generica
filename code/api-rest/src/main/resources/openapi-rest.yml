@@ -1,0 +1,258 @@
+openapi: "3.0.2"
+info:
+  title: "Integration ACL"
+  description: "IoP Generic ACL definition for integrate with Informational Services"
+  version : "0.1.0"
+  contact:
+    name: DRBCPE Team
+    email: luismcsa@inditex.com
+
+security:
+  - itxBearerAuth: []
+
+tags:
+  - name: schema
+    description: Translation metadata
+  - name: translation
+    description: Identifier translations
+
+paths:
+  /schema:
+    get:
+      operationId: translation-schemas
+      description: Returns metadada about supported id translations
+      summary: Supported translations metadata
+      tags:
+        - schema
+      responses:
+        '200':
+          description: Request completed successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 1024
+                items:
+                  $ref: '#/components/schemas/TranslationSchema'
+        '400':
+          $ref: "#/components/responses/400BadRequest"
+        "401":
+          $ref: "#/components/responses/401Unauthorized"
+        "404":
+          $ref: "#/components/responses/404NotFound"
+        "500":
+          $ref: "#/components/responses/500InternalServerError"        
+
+  /translation/search:
+    post:
+      operationId: translation-search
+      description: Accepts a translation request returning found translations acording to provided search terms
+      summary: Search for identifier equivalences
+      tags:
+        - translation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              maxItems: 2048
+              items:              
+                $ref: '#/components/schemas/TranslationSearchTerm'
+      responses:
+        '200':
+          description: Request completed successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 1024
+                items:
+                  $ref: '#/components/schemas/TranslationResult'
+        '400':
+          $ref: "#/components/responses/400BadRequest"
+        "401":
+          $ref: "#/components/responses/401Unauthorized"
+        "403":
+          $ref: "#/components/responses/403Unauthorized"
+        "404":
+          $ref: "#/components/responses/404NotFound"
+        "500":
+          $ref: "#/components/responses/500InternalServerError"        
+
+components:
+
+  securitySchemes:
+    itxBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+
+    IdentifierValue:
+      oneOf:
+        - type: integer
+        - type: string
+        - type: array
+          maxItems: 4
+          items:
+            anyOf:
+              - type: integer
+              - type: string
+
+    IdentifierValueSet:
+      type: object
+      additionalProperties: false
+      properties:
+        identifierName:
+          type: string
+          maxLength: 256
+          example: "VARIANT_GROUP"
+        identifierValues:
+          type: array
+          maxItems: 2048
+          items:
+            $ref: '#/components/schemas/IdentifierValue'
+
+    TranslationSearchTerm:
+      type: object
+      additionalProperties: false
+      properties:
+        fromPlatform:
+          type: string
+          maxLength: 256
+          example: IOP
+        toPlatform:
+          type: string
+          maxLength: 256
+          example: DB2_ON_PREM
+        query:
+          $ref: '#/components/schemas/IdentifierValueSet'
+
+    IdentifierTranslation:
+      type: object
+      additionalProperties: false
+      properties:
+        requestedIdentifier: 
+          $ref: '#/components/schemas/IdentifierValue'
+        fromValue:
+          $ref: '#/components/schemas/IdentifierValue'
+        toValue:
+          $ref: '#/components/schemas/IdentifierValue'
+
+    TranslationResult:
+      type: object
+      additionalProperties: false
+      properties:
+        fromPlatform:
+          type: string
+          maxLength: 256
+          example: IOP
+        toPlatform:
+          type: string
+          maxLength: 256
+          example: DB2_ON_PREM
+        identifierName:
+          type: string
+          maxLength: 256
+          example: "VARIANT_GROUP"
+        foundTranslations:
+          type: array
+          maxItems: 2048
+          items:
+            $ref: '#/components/schemas/IdentifierTranslation'
+
+    ValueType:
+      type: object
+      additionalProperties: false
+      properties:
+        dataType:
+          type: string
+          example: 'integer'
+          enum:
+            - integer
+            - uuid
+            - urn
+        multivalue:
+          type: boolean
+          example: false
+
+    IdentifierSchema:
+      type: object
+      additionalProperties: false
+      properties:
+        platform:
+          type: string
+          maxLength: 256
+          example: 'IOP'
+        name:
+          type: string
+          maxLength: 256
+          example: "VARIANT_GROUP"
+        valueType:
+          $ref: '#/components/schemas/ValueType'
+
+    TranslationSchema:
+      type: object
+      additionalProperties: false
+      properties:
+        translation:
+          type: string
+          maxLength: 256
+        from:
+          $ref: '#/components/schemas/IdentifierSchema'
+        to:
+          $ref: '#/components/schemas/IdentifierSchema'
+
+    ErrorResponse:
+      title: ErrorResponse
+      type: object
+      description: Response object containing data of an error in a request.
+      additionalProperties: false
+      properties:
+        type:
+          type: string
+          description: Error type
+          maxLength: 500
+          example: "about:blank"
+        title:
+          type: string
+          description: A machine-friendly identifier for the code.
+          maxLength: 500
+          example: Internal Server Error
+        status:
+          type: integer
+          description: The HTTP Status Code generated by the origin server for this occurrence of the problem.
+          format: int32
+          maximum: 599
+          minimum: 100
+          example: 500          
+        detail:
+          type: string
+          description: An English human-friendly description of the error.
+          maxLength: 5000
+          example: "deleteProduct.id: size must be between 0 and 20"
+        instance:
+          type: string
+          description: Endpoint instance failing.
+          maxLength: 2000
+          example: /v1/products
+  responses:
+    400BadRequest:
+      description: Bad request. One or more parameters has an invalid value.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    401Unauthorized:
+      description: Unauthorized
+    403Unauthorized:
+      description: Unauthorized
+    404NotFound:
+      description: Resource not found
+    500InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
