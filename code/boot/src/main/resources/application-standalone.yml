@@ -1,0 +1,21 @@
+logging:
+  level:
+    root: INFO
+amiga:
+  management:
+    server:
+      port: 8081
+  server:
+    context-path: /api-playground
+    port: 8080
+  service:
+    aaa:
+      local:
+        enable-local-test: true
+      paths:
+        app-public-path: /amiga/**,/swagger-ui**,/itx-openapi.js
+    web:
+      api:
+        production: false
+metadata:
+  jirakey: api-playground        

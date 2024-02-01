@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.inditex.amigafwk</groupId>
+    <artifactId>amiga-framework</artifactId>
+    <version>5.5.3</version>
+  </parent>
+
+  <groupId>local.luisve.poc</groupId>
+  <artifactId>api-playground</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+
+  <packaging>pom</packaging>
+
+  <name>${project.groupId}:${project.artifactId}</name>
+  <description />
+  <url />
+  <inceptionYear>2023</inceptionYear>
+  <organization>
+    <name>Industria de Diseño Textil, S.A.</name>
+    <url>https://inditex.com</url>
+  </organization>
+  <licenses />
+
+  <developers />
+
+  <modules>
+    <module>boot</module>
+    <module>domain</module>
+    <module>application</module>
+    <module>infrastructure</module>
+    <module>api-rest</module>
+    <module>jacoco-report-aggregate</module>
+  </modules>
+
+  <scm>
+    <connection>${scm-connection}</connection>
+    <developerConnection>${scm-developer-connection}</developerConnection>
+    <url>${scm-url}</url>
+    <tag>${scm-tag}</tag>
+  </scm>
+
+  <distributionManagement>
+    <repository>
+      <id>inditex-artifacts</id>
+      <name>Inditex Maven Repository</name>
+      <url>https://inditex.jfrog.io/artifactory/maven-release-local</url>
+    </repository>
+    <snapshotRepository>
+      <id>inditex-artifacts</id>
+      <name>Inditex Maven Repository</name>
+      <url>https://inditex.jfrog.io/artifactory/maven-snapshot-local</url>
+    </snapshotRepository>
+    <site />
+  </distributionManagement>
+
+  <properties>
+
+    <amiga-javaformat.version>2.9.0</amiga-javaformat.version>
+    <scm-developer-connection>scm:git:https://github.com/inditex/undefined.git</scm-developer-connection>
+    <scm-connection>scm:git:https://github.com/inditex/undefined.git</scm-connection>
+    <scm-url>https://github.com/inditex/undefined</scm-url>
+    <scm-tag>HEAD</scm-tag>
+    <project.scm.id>inditex-scm-github</project.scm.id>
+    <release.strategy.multibaseline>false</release.strategy.multibaseline>
+    <release.strategy.developmentBranch>develop</release.strategy.developmentBranch>
+    <release.strategy.createSyncPR>true</release.strategy.createSyncPR>
+    <release.strategy.syncPullReqLabels>kind/internal</release.strategy.syncPullReqLabels>
+    <java.version>17</java.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>api-playground-boot</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>api-playground-domain</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>api-playground-application</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>api-playground-infrastructure</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>api-playground-api-rest</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <repositories />
+  <pluginRepositories />
+
+  <build>
+    <finalName>${project.artifactId}-${project.version}</finalName>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>3.0.0</version>
+          <dependencies>
+            <dependency>
+              <groupId>com.inditex.maven.release</groupId>
+              <artifactId>maven-release-strategies</artifactId>
+              <version>0.7.1</version>
+            </dependency>
+            <dependency>
+              <groupId>org.apache.maven.release</groupId>
+              <artifactId>maven-release-semver-policy</artifactId>
+              <version>3.0.0</version>
+            </dependency>
+          </dependencies>
+          <configuration>
+            <arguments>-DskipEnforceSnapshots -DskipITs -DskipTests -DskipUTs -Dbuild.type=release</arguments>
+            <goals>deploy</goals>
+            <projectVersionPolicyId>SemVerVersionPolicy</projectVersionPolicyId>
+            <releaseStrategyId>GithubReleaseStrategy</releaseStrategyId>
+            <scmReleaseCommitComment>@{prefix} Prepare release @{releaseLabel}</scmReleaseCommitComment>
+            <scmDevelopmentCommitComment>@{prefix} Prepare for next development iteration</scmDevelopmentCommitComment>
+            <tagNameFormat>@{project.version}</tagNameFormat>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>enforce-snapshots</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <skip>${skipEnforceSnapshots}</skip>
+              <rules>
+                <requireSnapshotVersion>
+                  <failWhenParentIsRelease>false</failWhenParentIsRelease>
+                  <message>Final versions not allowed</message>
+                </requireSnapshotVersion>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.inditex.aqsw.amiga.javaformat</groupId>
+        <artifactId>amiga-javaformat-maven-plugin</artifactId>
+        <version>${amiga-javaformat.version}</version>
+        <executions>
+          <execution>
+            <phase>validate</phase>
+            <goals>
+              <goal>validate</goal>
+            </goals>
+            <inherited>true</inherited>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <reporting />
+
+  <profiles />
+</project>

@@ -1,0 +1,7 @@
+---
+service: icbcpurent
+contact:
+  email: luismcsa@inditex.com
+  name: 'Luis Manuel Chamoso Salgado'
+locations:
+  - domain: technology

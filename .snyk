@@ -1,0 +1,54 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.14.1
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  SNYK-JAVA-COMH2DATABASE-31685:
+    - '* > com.inditex.amigafwk.batch:batch-starter@5.2.0 > com.inditex.amigafwk.batch:batch-core@5.2.0 > com.h2database:h2@2.1.214':
+        reason: >-
+          No remediation available.
+  SNYK-JAVA-COMH2DATABASE-3146851:
+    - '* > com.inditex.amigafwk.batch:batch-starter@5.2.0 > com.inditex.amigafwk.batch:batch-core@5.2.0 > com.h2database:h2@2.1.214':
+        reason: >-
+          No remediation available.
+  SNYK-JAVA-ORGAPACHESSHD-5769687:
+    - '* > org.infinispan:infinispan-client-hotrod-jakarta@14.0.11.Final-redhat-00001 > org.wildfly.security:wildfly-elytron-sasl-digest@1.20.4.Final-redhat-00002 > org.wildfly.security:wildfly-elytron-credential@1.20.4.Final-redhat-00002 > org.wildfly.security:wildfly-elytron-keystore@1.20.4.Final-redhat-00002 > org.wildfly.security:wildfly-elytron-x500-cert@1.20.4.Final-redhat-00002 > org.apache.sshd:sshd-common@2.9.2.redhat-00001':
+        reason: >- 
+          Ignored until datagrid provide a fixed version of sshd.
+  SNYK-JAVA-ORGYAML-3152153:
+    - '* > org.yaml:snakeyaml@1.33':
+        reason: >- 
+          Ignored until SB provides a fixed version of snakeyaml.
+  SNYK-JAVA-IONETTY-1042268:
+    - '* > io.netty:netty-handler@4.1.97.Final':
+      reason: >- 
+          No remediation available.
+  SNYK-JAVA-ORGJETBRAINSKOTLIN-2393744:
+    - '* > org.jetbrains.kotlin:kotlin-stdlib@1.8.22':
+        reason: >- 
+          No remediation available
+  SNYK-JAVA-ORGXERIALSNAPPY-5710960:
+    - '* > org.apache.kafka:kafka-clients@3.4.1 > org.xerial.snappy:snappy-java@1.1.8.4':
+        reason: >- 
+          Ignored until we can update to a kafka-clients without this vulnerability
+  SNYK-JAVA-ORGXERIALSNAPPY-5710959:
+    - '* > org.apache.kafka:kafka-clients@3.4.1 > org.xerial.snappy:snappy-java@1.1.8.4':
+        reason: >- 
+          Ignored until we can update to a kafka-clients without this vulnerability
+  SNYK-JAVA-ORGXERIALSNAPPY-5710961:
+    - '* > org.apache.kafka:kafka-clients@3.4.1 > org.xerial.snappy:snappy-java@1.1.8.4':
+        reason: >- 
+          Ignored until we can update to a kafka-clients without this vulnerability
+  SNYK-JAVA-ORGBOUNCYCASTLE-5771339:
+    - '* > org.bouncycastle:bcprov-jdk15on@1.69':
+        reason: >-
+          No remediation available.
+  SNYK-JAVA-ORGBOUNCYCASTLE-5771340:
+    - '* > org.bouncycastle:bcprov-jdk18on@1.72':
+        reason: >-
+          Ignored until spring-security provides a fixed version (>=1.74)
+  SNYK-JAVA-ORGBOUNCYCASTLE-5771489:
+    - '* > org.bouncycastle:bcprov-jdk15to18@1.72':
+        reason: >-
+          Ignored until ibm-mq provides a fixed version (>=1.74)
+patch: {}
+org-id: 

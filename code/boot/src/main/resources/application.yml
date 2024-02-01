@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: api-playground
+  profiles:
+    active: standalone
+
+app:
+  version: @project.version@
+
+logging:
+  level:
+    root: ERROR
