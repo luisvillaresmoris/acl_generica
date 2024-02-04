@@ -55,3 +55,4 @@ yarn.lock
 .DS_Store
 
 .yo-rc.json
+/.tool-versions
